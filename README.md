@@ -9,7 +9,7 @@
 
 ## Other Prerequisites
 
-In order to utilize this service, you must have an account with the Georgetown University Alumni & Student Federal Credit Union (GUASFCU). You can create this account by signing up at <a>www.guasfcu.com</a>.
+In order to utilize this service, you must have an account with the Georgetown University Alumni & Student Federal Credit Union (GUASFCU). You can create this account by signing up at [www.guasfcu.com](www.guasfcu.com)
 
 
 ## Set up
