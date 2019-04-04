@@ -5,10 +5,9 @@ import os
 from datetime import datetime
 import json
 import requests
-# from dotenv import load_dotenv
-import banking_client
+from dotenv import load_dotenv
 
-# load_dotenv() # loads environment variables set in a ".env" file, including the value of the ALPHAVANTAGE_API_KEY variable
+load_dotenv()
 
 token_key = os.environ.get("token")
 secret_key = os.environ.get("secret")
