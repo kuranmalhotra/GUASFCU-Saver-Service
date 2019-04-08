@@ -2,7 +2,7 @@
 # ## The purpose of this application is to help the user save money incrementally, by rounding up the transactions they perform on a daily basis to the nearest dollar, and depositing those extra few pennies into their savings account. 
 
 import os
-from datetime import datetime
+import datetime
 import json
 import requests
 from dotenv import load_dotenv
@@ -18,10 +18,10 @@ base_url='https://api.demo.narmitech.com/v1/'
 
 date=datetime.datetime.utcnow().replace(microsecond=0).isoformat()
 date=f'{date}Z'
-url='https://api.demo.narmitech.com/v1/accounts/'
+url='https://api.guasfcu.com/v1/accounts/'
 
 signature_written=os.popen(f'echo -n "date: {date}" | openssl dgst -sha256 -binary -hmac "{secret}" | base64').read()
-curl_comm=f"""curl -H "Authorization: Bearer {token}" -H "Date: {date}" -H "Signature: keyId=\\\"{token}\\\",algorithm=\\\"hmac-sha256\\\",headers=\\\"date\\\",signature=\\\"{signature_written}\\\"" 'https://api.demo.narmitech.com/v1/accounts/'"""
+curl_comm=f"""curl -H "Authorization: Bearer {token}" -H "Date: {date}" -H "Signature: keyId=\\\"{token}\\\",algorithm=\\\"hmac-sha256\\\",headers=\\\"date\\\",signature=\\\"{signature_written}\\\"" {url}"""
 
 response=os.popen(curl_comm).read()
 print(response)
