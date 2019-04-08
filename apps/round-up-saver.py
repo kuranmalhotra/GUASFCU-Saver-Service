@@ -9,14 +9,32 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-token_key = os.environ.get("token")
-secret_key = os.environ.get("secret")
-current_date = datetime.now()
+# Static Call Variables:
 
-header = {
-	'token': token_key,
-	'secret': secret_key, 
-	'date': current_date
-}
+token = os.environ.get("token")
+secret = os.environ.get("secret")
+signature_imported = os.environ.get("sig")
+base_url='https://api.demo.narmitech.com/v1/'
 
-print(header)
+date=datetime.datetime.utcnow().replace(microsecond=0).isoformat()
+date=f'{date}Z'
+url='https://api.demo.narmitech.com/v1/accounts/'
+
+signature_written=os.popen(f'echo -n "date: {date}" | openssl dgst -sha256 -binary -hmac "{secret}" | base64').read()
+curl_comm=f"""curl -H "Authorization: Bearer {token}" -H "Date: {date}" -H "Signature: keyId=\\\"{token}\\\",algorithm=\\\"hmac-sha256\\\",headers=\\\"date\\\",signature=\\\"{signature_written}\\\"" 'https://api.demo.narmitech.com/v1/accounts/'"""
+
+response=os.popen(curl_comm).read()
+print(response)
+# Python scripts that don't really work: 
+
+# signature_conc=f'keyId="{token}",algorithm="hmac-sha256",headers="date",signature="{signature_written}"'
+# headers = {
+#     'Authorization':f'Bearer {token}',
+#     'Date':date,
+#     'Signature':signature_conc,
+# }
+
+# print(signature_written)
+# print(headers)
+# response = requests.get('https://api.demo.narmitech.com/v1/accounts/', headers=headers)
+# response = requests.get('https://api.demo.narmitech.com/v1/accounts/', headers=headers)
