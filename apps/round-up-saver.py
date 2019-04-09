@@ -39,6 +39,3 @@ print("RESPONSE:", type(response))
 print(response.status_code)
 print(parsed_response)
 
-tran_data = 
-
-
