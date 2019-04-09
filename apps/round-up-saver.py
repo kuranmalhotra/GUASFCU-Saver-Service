@@ -18,20 +18,23 @@ savings_id = os.environ.get("42993X_ID")
 signature_imported = os.environ.get("sig")
 base_url = 'https://api.guasfcu.com/v1/'
 
-date = os.environ.get("NARMI_DATE", datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ"))
-TRANSACTION_URL = f'{base_url}accounts/{checking_id}/transactions'
+# Commented out code to ignore pull request and just work off of a transaction pull json output file (ignored to preserve personal data)
 
-sig = os.environ.get("NARMI_SIG", "OOPS")
-signature = f'keyId="{TOKEN}",algorithm="hmac-sha256",headers="date",signature="{sig}"'
+# date = os.environ.get("NARMI_DATE", datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ"))
+# TRANSACTION_URL = f'{base_url}accounts/{checking_id}/transactions'
 
-headers = {
-    "Authorization": f"Bearer {TOKEN}",
-    "Date": date,
-    "Signature": signature
-}
-print(headers)
+# sig = os.environ.get("NARMI_SIG", "OOPS")
+# signature = f'keyId="{TOKEN}",algorithm="hmac-sha256",headers="date",signature="{sig}"'
 
-response = requests.get(TRANSACTION_URL, headers=headers)
+# headers = {
+#     "Authorization": f"Bearer {TOKEN}",
+#     "Date": date,
+#     "Signature": signature
+# }
+# print(headers)
+
+# response = requests.get(TRANSACTION_URL, headers=headers)
+
 parsed_response=response.text
 
 print("-------------------")
