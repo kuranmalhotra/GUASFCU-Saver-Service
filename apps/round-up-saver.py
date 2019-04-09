@@ -35,6 +35,8 @@ base_url = 'https://api.guasfcu.com/v1/'
 
 # response = requests.get(TRANSACTION_URL, headers=headers)
 
+response = json.loads(test.json)
+
 parsed_response=response.text
 
 print("-------------------")
