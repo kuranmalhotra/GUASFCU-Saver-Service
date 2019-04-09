@@ -2,7 +2,7 @@
 # ## The purpose of this application is to help the user save money incrementally, by rounding up the transactions they perform on a daily basis to the nearest dollar, and depositing those extra few pennies into their savings account. 
 
 import os
-import datetime
+from datetime import datetime
 import json
 import requests
 from dotenv import load_dotenv
@@ -11,30 +11,34 @@ load_dotenv()
 
 # Static Call Variables:
 
-token = os.environ.get("token")
+TOKEN = os.environ.get("token")
 secret = os.environ.get("secret")
+checking_id = os.environ.get("42993X_ID")
+savings_id = os.environ.get("42993X_ID")
 signature_imported = os.environ.get("sig")
-base_url='https://api.demo.narmitech.com/v1/'
+base_url = 'https://api.guasfcu.com/v1/'
 
-date=datetime.datetime.utcnow().replace(microsecond=0).isoformat()
-date=f'{date}Z'
-url='https://api.guasfcu.com/v1/accounts/'
+date = os.environ.get("NARMI_DATE", datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ"))
+TRANSACTION_URL = f'{base_url}accounts/{checking_id}/transactions'
 
-signature_written=os.popen(f'echo -n "date: {date}" | openssl dgst -sha256 -binary -hmac "{secret}" | base64').read()
-curl_comm=f"""curl -H "Authorization: Bearer {token}" -H "Date: {date}" -H "Signature: keyId=\\\"{token}\\\",algorithm=\\\"hmac-sha256\\\",headers=\\\"date\\\",signature=\\\"{signature_written}\\\"" {url}"""
+sig = os.environ.get("NARMI_SIG", "OOPS")
+signature = f'keyId="{TOKEN}",algorithm="hmac-sha256",headers="date",signature="{sig}"'
 
-response=os.popen(curl_comm).read()
-print(response)
-# Python scripts that don't really work: 
+headers = {
+    "Authorization": f"Bearer {TOKEN}",
+    "Date": date,
+    "Signature": signature
+}
+print(headers)
 
-# signature_conc=f'keyId="{token}",algorithm="hmac-sha256",headers="date",signature="{signature_written}"'
-# headers = {
-#     'Authorization':f'Bearer {token}',
-#     'Date':date,
-#     'Signature':signature_conc,
-# }
+response = requests.get(TRANSACTION_URL, headers=headers)
+parsed_response=response.text
 
-# print(signature_written)
-# print(headers)
-# response = requests.get('https://api.demo.narmitech.com/v1/accounts/', headers=headers)
-# response = requests.get('https://api.demo.narmitech.com/v1/accounts/', headers=headers)
+print("-------------------")
+print("RESPONSE:", type(response))
+print(response.status_code)
+print(parsed_response)
+
+tran_data = 
+
+
