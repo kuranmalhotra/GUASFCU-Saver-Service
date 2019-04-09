@@ -35,12 +35,13 @@ base_url = 'https://api.guasfcu.com/v1/'
 
 # response = requests.get(TRANSACTION_URL, headers=headers)
 
-response = json.loads(test.json)
-
-parsed_response=response.text
+# Open sample json transaction data
+file = open('test.txt', 'r')
+parsed_response = file.read()
+file.close()
 
 print("-------------------")
-print("RESPONSE:", type(response))
-print(response.status_code)
+# print("RESPONSE:", type(response))
+# print(response.status_code)
 print(parsed_response)
 
