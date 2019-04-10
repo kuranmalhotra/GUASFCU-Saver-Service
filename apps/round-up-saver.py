@@ -39,16 +39,25 @@ line = "-"*50
 # response = requests.get(TRANSACTION_URL, headers=headers)
 
 # Open sample json transaction data
-# file = open('test.txt', 'r')
-# parsed_response = file.read()
-# file.close()
+
+def round_up(my_amount):
+		round_val = 100-my_amount
+		return(round_val)
 
 with open('test.txt') as json_file:
 	data=json.load(json_file)
 	for p in data['transactions']:
-		if p['source'] == "card"
-
+		if p['source'] == "card":
+			cents = int(str(p['amount'])[-2:])
+			
 			print(p['amount'])
+			print(cents)
+			
+			if (cents) != 0:
+				rounded_val = round_up(cents)
+			else: rounded_val = 0
+			
+			print(rounded_val)
 			print('-----')
 
 print(line)
