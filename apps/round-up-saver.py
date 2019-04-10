@@ -13,10 +13,13 @@ load_dotenv()
 
 TOKEN = os.environ.get("token")
 secret = os.environ.get("secret")
-checking_id = os.environ.get("42993X_ID")
+checking_id = os.environ.get("42993X_ID") ##CHANGE
+checking_bal_id = f'abl_{checking_id}'
 savings_id = os.environ.get("42993X_ID")
+savings_bal_id = f'abl_{savings_id}'
 signature_imported = os.environ.get("sig")
 base_url = 'https://api.guasfcu.com/v1/'
+line = "-"*50
 
 # Commented out code to ignore pull request and just work off of a transaction pull json output file (ignored to preserve personal data)
 
@@ -36,15 +39,17 @@ base_url = 'https://api.guasfcu.com/v1/'
 # response = requests.get(TRANSACTION_URL, headers=headers)
 
 # Open sample json transaction data
-file = open('test.txt', 'r')
-parsed_response = file.read()
-file.close()
+# file = open('test.txt', 'r')
+# parsed_response = file.read()
+# file.close()
 
-print("-------------------")
-# print("RESPONSE:", type(response))
-# print(response.status_code)
-print(parsed_response)
+with open('test.txt') as json_file:
+	data=json.load(json_file)
+	for p in data['transactions']:
+		print(p['amount'])
+		print('-----')
 
-print("-------------------")
-print(parsed_response['transactions'])
+print(line)
+
+
 
