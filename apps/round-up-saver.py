@@ -45,3 +45,6 @@ print("-------------------")
 # print(response.status_code)
 print(parsed_response)
 
+print("-------------------")
+print(parsed_response['transactions'])
+
