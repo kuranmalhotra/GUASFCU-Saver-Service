@@ -46,8 +46,10 @@ line = "-"*50
 with open('test.txt') as json_file:
 	data=json.load(json_file)
 	for p in data['transactions']:
-		print(p['amount'])
-		print('-----')
+		if p['source'] == "card"
+
+			print(p['amount'])
+			print('-----')
 
 print(line)
 
