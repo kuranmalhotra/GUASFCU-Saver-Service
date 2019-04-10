@@ -13,8 +13,8 @@ load_dotenv()
 
 TOKEN = os.environ.get("token")
 secret = os.environ.get("secret")
-checking_id = os.environ.get("42993X_ID")
-savings_id = os.environ.get("42993X_ID")
+checking_id = os.environ.get("FROMACCT_ID")
+savings_id = os.environ.get("TOACCT_ID")
 signature_imported = os.environ.get("sig")
 base_url = 'https://api.guasfcu.com/v1/'
 
