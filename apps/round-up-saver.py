@@ -44,6 +44,9 @@ def round_up(my_amount):
 		round_val = 100-my_amount
 		return(round_val)
 
+
+total_savings = 0
+
 with open('test.txt') as json_file:
 	data=json.load(json_file)
 	for p in data['transactions']:
@@ -56,10 +59,13 @@ with open('test.txt') as json_file:
 			if (cents) != 0:
 				rounded_val = round_up(cents)
 			else: rounded_val = 0
+
+			total_savings = total_savings + rounded_val
 			
 			print(rounded_val)
 			print('-----')
 
+print(total_savings)
 print(line)
 
 
