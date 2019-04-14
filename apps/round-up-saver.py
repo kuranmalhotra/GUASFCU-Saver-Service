@@ -40,9 +40,13 @@ line = "-"*50
 
 # Open sample json transaction data
 
+def tare_cents(my_dollar_value):
+	cent_value = int(str(my_dollar_value)[-2:])
+	return(cent_value)
+
 def round_up(my_amount):
-		round_val = 100-my_amount
-		return(round_val)
+	round_val = 100-my_amount
+	return(round_val)
 
 
 total_savings = 0
@@ -51,11 +55,7 @@ with open('test.txt') as json_file:
 	data=json.load(json_file)
 	for p in data['transactions']:
 		if p['source'] == "card":
-			cents = int(str(p['amount'])[-2:])
-			
-			print(p['amount'])
-			print(cents)
-			
+			cents = tare_cents(p['amount'])			
 			if (cents) != 0:
 				rounded_val = round_up(cents)
 			else: rounded_val = 0
