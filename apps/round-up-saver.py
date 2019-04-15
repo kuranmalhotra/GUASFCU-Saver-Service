@@ -20,12 +20,13 @@ savings_id = os.environ.get("TO_ACCT_ID")
 savings_bal_id = f'abl_{savings_id}'
 
 signature_imported = os.environ.get("sig")
-base_url = 'https://api.guasfcu.com/v1/transfers/'
+base_url = os.environ.get("baseurl")
 line = "-"*50
 
 # Commented out code to ignore pull request and just work off of a transaction pull json output file (ignored to preserve personal data)
 
-date = os.environ.get("NARMI_DATE", datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ"))
+# date = os.environ.get("NARMI_DATE", datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ"))
+date = datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
 # TRANSACTION_URL = f'{base_url}accounts/{checking_id}/transactions'
 
 sig = os.environ.get("NARMI_SIG", "OOPS")
@@ -68,8 +69,10 @@ with open('test.txt') as json_file:
 			print(rounded_val)
 			print('-----')
 
-print(total_savings)
-print(line)
+
+# Initialilze the transfer post request
+
+transfer_url = f"{base_url}transfers/"
 
 # Create payload to post total savings
 
@@ -79,9 +82,10 @@ payload ={
 	"amount": total_savings
 }
 
-response = requests.post(base_url, headers=headers, json=payload)
-print(response)
-print(response.text)
+post_response = requests.post(transfer_url, headers=headers, json=payload)
+
+print(post_response)
+print(post_response.text)
 
 
 
