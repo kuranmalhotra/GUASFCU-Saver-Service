@@ -18,45 +18,44 @@ checking_id = os.environ.get("FROM_ACCT_ID")
 checking_bal_id = f'abl_{checking_id}'
 savings_id = os.environ.get("TO_ACCT_ID")
 savings_bal_id = f'abl_{savings_id}'
-checking_id = os.environ.get("FROMACCT_ID")
-savings_id = os.environ.get("TOACCT_ID")
 
 signature_imported = os.environ.get("sig")
-base_url = 'https://api.guasfcu.com/v1/'
+base_url = 'https://api.guasfcu.com/v1/transfers/'
 line = "-"*50
 
 # Commented out code to ignore pull request and just work off of a transaction pull json output file (ignored to preserve personal data)
 
-# date = os.environ.get("NARMI_DATE", datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ"))
+date = os.environ.get("NARMI_DATE", datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ"))
 # TRANSACTION_URL = f'{base_url}accounts/{checking_id}/transactions'
 
-# sig = os.environ.get("NARMI_SIG", "OOPS")
-# signature = f'keyId="{TOKEN}",algorithm="hmac-sha256",headers="date",signature="{sig}"'
+sig = os.environ.get("NARMI_SIG", "OOPS")
+signature = f'keyId="{TOKEN}",algorithm="hmac-sha256",headers="date",signature="{sig}"'
 
-# headers = {
-#     "Authorization": f"Bearer {TOKEN}",
-#     "Date": date,
-#     "Signature": signature
-# }
-# print(headers)
+headers = {
+    "Authorization": f"Bearer {TOKEN}",
+    "Date": date,
+    "Signature": signature
+}
 
-# response = requests.get(TRANSACTION_URL, headers=headers)
+# Function initialization
 
-# Open sample json transaction data
-
-def tare_cents(my_dollar_value):
+def tare_cents(my_dollar_value): # <-- remove the dollar value, and keep the cents
 	cent_value = int(str(my_dollar_value)[-2:])
 	return(cent_value)
 
-def round_up(my_amount):
+def round_up(my_amount): # <-- round up the cent value to the nearest dollar
 	round_val = 100-my_amount
 	return(round_val)
 
-
 total_savings = 0
+
+# Open sample json transaction data
 
 with open('test.txt') as json_file:
 	data=json.load(json_file)
+	
+# run transactions off json file
+
 	for p in data['transactions']:
 		if p['source'] == "card":
 			cents = tare_cents(p['amount'])			
@@ -71,6 +70,18 @@ with open('test.txt') as json_file:
 
 print(total_savings)
 print(line)
+
+# Create payload to post total savings
+
+payload ={
+	"from_account_id": f"{checking_id}",
+	"to_account_id": f"{savings_id}",
+	"amount": total_savings
+}
+
+response = requests.post(base_url, headers=headers, json=payload)
+print(response)
+print(response.text)
 
 
 
