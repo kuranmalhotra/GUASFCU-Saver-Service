@@ -1,3 +1,7 @@
+#####
+
+Pull Accounts
+
 token='XXXX'
 secret='YYYY'
 
@@ -8,4 +12,19 @@ signature=`echo -n "date: $date" | openssl dgst -sha256 -binary -hmac "$secret" 
 echo $date
 echo $signature
 
-curl -H "Authorization: Bearer $token" -H "Date: $date" -H "Signature: keyId=\"$token\",algorithm=\"hmac-sha256\",headers=\"date\",signature=\"$signature\"" 'https://api.guasfcu.com/v1/accounts/'>> //Users/Kuran/Desktop/response4.json
+curl -H "Authorization: Bearer $token" -H "Date: $date" -H "Signature: keyId=\"$token\",algorithm=\"hmac-sha256\",headers=\"date\",signature=\"$signature\"" 'https://api.guasfcu.com/v1/accounts/''
+
+
+##### 
+
+token='XXXX'
+secret='YYYY'
+FROM_ACCT_ID='aaaa'
+TO_ACCT_ID='bbbb'
+
+
+date=`date -u +'%Y-%m-%dT%H:%M:%SZ'`
+
+signature=`echo -n "date: $date" | openssl dgst -sha256 -binary -hmac "$secret" | base64`
+
+curl -X POST -d '{"from_account_id": "$FROM_ACCT_ID","to_account_id": "$TO_ACCT_ID","amount": 100}' -H "Authorization: Bearer $token" -H "Date: $date" -H "Signature: keyId=\"$token\",algorithm=\"hmac-sha256\",headers=\"date\",signature=\"$signature\"" 'https://api.guasfcu.com/v1/transfers/'

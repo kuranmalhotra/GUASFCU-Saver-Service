@@ -13,29 +13,64 @@ load_dotenv()
 
 TOKEN = os.environ.get("token")
 secret = os.environ.get("secret")
+
+checking_id = os.environ.get("FROM_ACCT_ID")
+checking_bal_id = f'abl_{checking_id}'
+savings_id = os.environ.get("TO_ACCT_ID")
+savings_bal_id = f'abl_{savings_id}'
 checking_id = os.environ.get("FROMACCT_ID")
 savings_id = os.environ.get("TOACCT_ID")
+
 signature_imported = os.environ.get("sig")
 base_url = 'https://api.guasfcu.com/v1/'
+line = "-"*50
 
-date = os.environ.get("NARMI_DATE", datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ"))
-TRANSACTION_URL = f'{base_url}accounts/{checking_id}/transactions'
+# Commented out code to ignore pull request and just work off of a transaction pull json output file (ignored to preserve personal data)
 
-sig = os.environ.get("NARMI_SIG", "OOPS")
-signature = f'keyId="{TOKEN}",algorithm="hmac-sha256",headers="date",signature="{sig}"'
+# date = os.environ.get("NARMI_DATE", datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ"))
+# TRANSACTION_URL = f'{base_url}accounts/{checking_id}/transactions'
 
-headers = {
-    "Authorization": f"Bearer {TOKEN}",
-    "Date": date,
-    "Signature": signature
-}
-print(headers)
+# sig = os.environ.get("NARMI_SIG", "OOPS")
+# signature = f'keyId="{TOKEN}",algorithm="hmac-sha256",headers="date",signature="{sig}"'
 
-response = requests.get(TRANSACTION_URL, headers=headers)
-parsed_response=response.text
+# headers = {
+#     "Authorization": f"Bearer {TOKEN}",
+#     "Date": date,
+#     "Signature": signature
+# }
+# print(headers)
 
-print("-------------------")
-print("RESPONSE:", type(response))
-print(response.status_code)
-print(parsed_response)
+# response = requests.get(TRANSACTION_URL, headers=headers)
+
+# Open sample json transaction data
+
+def tare_cents(my_dollar_value):
+	cent_value = int(str(my_dollar_value)[-2:])
+	return(cent_value)
+
+def round_up(my_amount):
+	round_val = 100-my_amount
+	return(round_val)
+
+
+total_savings = 0
+
+with open('test.txt') as json_file:
+	data=json.load(json_file)
+	for p in data['transactions']:
+		if p['source'] == "card":
+			cents = tare_cents(p['amount'])			
+			if (cents) != 0:
+				rounded_val = round_up(cents)
+			else: rounded_val = 0
+
+			total_savings = total_savings + rounded_val
+			
+			print(rounded_val)
+			print('-----')
+
+print(total_savings)
+print(line)
+
+
 
