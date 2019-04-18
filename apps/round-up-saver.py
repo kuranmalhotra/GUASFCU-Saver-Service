@@ -11,8 +11,8 @@ load_dotenv()
 
 # Static Call Variables:
 
-TOKEN = os.environ.get("token")
-secret = os.environ.get("secret")
+TOKEN = os.environ.get("TOKEN")
+secret = os.environ.get("SECRET")
 
 checking_id = os.environ.get("FROM_ACCT_ID")
 checking_bal_id = f'abl_{checking_id}'
