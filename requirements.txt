@@ -1,4 +1,4 @@
-pprtint
+pprint
 pytest
 python-dotenv
 requests
