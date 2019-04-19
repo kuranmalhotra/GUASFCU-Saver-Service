@@ -1,6 +1,10 @@
-# GUASFCU Applets
+# GUASFCU Saver Service
 
-This will serve as the overarching repository for a set of applets I hope to develop to integrate into the Application of the Georgetown University Alumni & Student Federal Credit Union (GUASFCU). While the first applet is the one I hope to turn in (Round-up Savings), I do hope to continue developing more applets in the future. 
+The purpose of this service is to automate savings for college students who might not have the ability to save by traditional means. The main service currently deployed is the Round Up Saver Tool. 
+
+The tool functions via its remote server deployment, and every 10 minutes it gathers all new debit card transactions made out of the linked account. From there, the service aggregates the Penny value of the difference between each transaction amount and the next dollar, and deposits that value into savings. 
+
+Through this methodology, for every cup of coffee you buy at $2.25, you will save $0.75. 
 
 ## Technical Prerequisites
 
