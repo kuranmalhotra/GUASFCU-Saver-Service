@@ -3,7 +3,6 @@
 
 # Import necessary packages
 
-
 from datetime import datetime
 from dotenv import load_dotenv
 import json
@@ -52,14 +51,13 @@ headers = {
 # Gather last transaction ID
 
 with open('storage/last_tranID.txt') as file:
-	last_transaction = file.read()
+	previous_transaction = file.read()
 
-TRANSACTION_URL = f'{base_url}/accounts/{checking_id}/transactions?before={last_transaction}'
+TRANSACTION_URL = f'{base_url}/accounts/{checking_id}/transactions?before={previous_transaction}'
 
 # tran_response = requests.get(TRANSACTION_URL, headers=headers)
 
 # print(tran_response)
-
 
 total_savings = 0
 total_spend = 0
@@ -73,8 +71,8 @@ with open('test.txt') as json_file:
 # run transactions off json file
 
 	for p in data['transactions']:
+		tranIDs.append(p["id"])
 		if p['source'] == "card":
-			tranIDs.append(p["id"])
 			total_spend = total_spend + p['amount']
 			cents = tare_cents(p['amount'])			
 			if (cents) != 0:
@@ -86,18 +84,17 @@ with open('test.txt') as json_file:
 			print(rounded_val)
 			print('-----')
 
-last_ID = tranIDs[0]
-
-total_spend_usd = "{0:.2f}".format(-(total_spend/100))
-total_spend_formatted = str(f'${total_spend_usd}')
-
-total_savings_usd = "{0:.2f}".format(total_savings/100)
-total_savings_formatted = str(f'${total_savings_usd}')
-
 # Save last transaction ID to text file
 
+last_ID = tranIDs[0]
 with open('storage/last_tranID.txt', 'w') as f:
 	f.write(last_ID)
+
+# If there're no transactions, exit the script
+
+if total_savings == 0:
+	print('There were no debit card transactions, now exiting the applet')
+	exit()
 
 # Initialilze the transfer post request
 
@@ -117,37 +114,36 @@ TRANSFER_URL = f"/{base_url}transfers/"
 # print(post_response.text)
 
 
-# Send text update
+## Send text update (Mainly built right off the send-sms.py in class example)
 
 # Initialize environment variables:
+
 TWILIO_ACCOUNT_SID = os.environ.get("TWILIO_ACCOUNT_SID", "OOPS, please specify env var called 'TWILIO_ACCOUNT_SID'")
 TWILIO_AUTH_TOKEN  = os.environ.get("TWILIO_AUTH_TOKEN", "OOPS, please specify env var called 'TWILIO_AUTH_TOKEN'")
 SENDER_SMS  = os.environ.get("SENDER_SMS", "OOPS, please specify env var called 'SENDER_SMS'")
 RECIPIENT_SMS  = os.environ.get("RECIPIENT_SMS", "OOPS, please specify env var called 'RECIPIENT_SMS'")
 
-# AUTHENTICATE
+# Format the spend/save numbers for notification text
+
+total_spend_usd = "{0:.2f}".format(-(total_spend/100))
+total_spend_formatted = str(f'${total_spend_usd}')
+
+total_savings_usd = "{0:.2f}".format(total_savings/100)
+total_savings_formatted = str(f'${total_savings_usd}')
+
+# Authenticate into the Twilio service
 
 client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 
-# COMPILE REQUEST PARAMETERS (PREPARE THE MESSAGE)
+# Prepare the message for sending
 
 content = f"This is a message from GUASFCU. You spent {total_spend_formatted} and saved {total_savings_formatted}!"
 
-# ISSUE REQUEST (SEND SMS)
+# Send the SMS
 
 message = client.messages.create(to=RECIPIENT_SMS, from_=SENDER_SMS, body=content)
 
-# PARSE RESPONSE
+# Update log file
 
-pp = pprint.PrettyPrinter(indent=4)
-
-print("----------------------")
-print("SMS")
-print("----------------------")
-print("RESPONSE: ", type(message))
-print("FROM:", message.from_)
-print("TO:", message.to)
-print("BODY:", message.body)
-print("PROPERTIES:")
-pp.pprint(dict(message._properties))
-
+with open('storage/log.txt', 'a') as log:
+	log.write(f"\n{line}\nDate: {date}\nLast Transaction: {last_ID}\nTotal Spend: {total_spend_formatted}\nTotal Savings: {total_savings_formatted}")

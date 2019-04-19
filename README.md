@@ -18,14 +18,14 @@ In order to utilize this service, you must have an account with GUASFCU. You can
 
 In order to set up this applet, please download install the source code:
 
-```
+```sh
 git clone git@github.com:kmalhotra/GUASFCU-Applet
 cd GUASFCU-Applet/
 ```
 
 Install the package dependencies:
 
-```
+```sh
 pip install -r requirements.txt
 ```
 

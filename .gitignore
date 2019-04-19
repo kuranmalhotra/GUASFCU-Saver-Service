@@ -1,8 +1,12 @@
-Notes.rtf
+
 .env
+
+log.txt
+last_tranID.txt
+Notes.rtf
 test.json
 test.txt
+test2.txt
 recent_tran.txt
-Notes.rtf
 Requirements.docx
 test_script.py
