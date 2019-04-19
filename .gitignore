@@ -1,7 +1,6 @@
 
 .env
 log.txt
-last_tranID.txt
 Notes.rtf
 test.json
 test.txt
@@ -14,3 +13,4 @@ Requirements.docx
 current.png
 info.png
 proposed.png
+storage/last_tranID.txt

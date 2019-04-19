@@ -37,8 +37,9 @@ signature_imported = os.environ.get("sig")
 base_url = os.environ.get("baseurl")
 line = "-"*50
 
-date = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+current_date = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
 
+date = os.environ.get("NARMI_DATE")
 sig = os.environ.get("NARMI_SIG", "OOPS")
 signature = f'keyId="{TOKEN}",algorithm="hmac-sha256",headers="date",signature="{sig}"'
 
@@ -48,6 +49,30 @@ headers = {
     "Signature": signature
 }
 
+tranIDs = []
+total_spend = 0
+total_savings = 0
+
+
+# Open sample json transaction data
+
+# with open('test.txt') as json_file:
+# 	data=json.load(json_file)
+#   #run transactions off json file	
+#	for p in data['transactions']:
+#		tranIDs.append(p["id"])
+#		if p['source'] == "card":
+#			total_spend = total_spend + p['amount']
+#			cents = tare_cents(p['amount'])			
+#			if (cents) != 0:
+#				rounded_val = round_up(cents)
+#			else: rounded_val = 0
+#
+#			total_savings = total_savings + rounded_val
+#			
+#			print(rounded_val)
+#			print(line)
+
 # Gather last transaction ID
 
 with open('storage/last_tranID.txt') as file:
@@ -55,36 +80,34 @@ with open('storage/last_tranID.txt') as file:
 
 TRANSACTION_URL = f'{base_url}/accounts/{checking_id}/transactions?before={previous_transaction}'
 
-# tran_response = requests.get(TRANSACTION_URL, headers=headers)
+tran_response = requests.get(TRANSACTION_URL, headers=headers)
+print(tran_response)
+print(tran_response.text)
+print(line)
 
-# print(tran_response)
+# Utilize real transaction data
 
-total_savings = 0
-total_spend = 0
-tranIDs = []
-
-# Open sample json transaction data
-
-with open('test.txt') as json_file:
-	data=json.load(json_file)
-
+data = json.loads(tran_response.text)
 # run transactions off json file
+for p in data['transactions']:
+	tranIDs.append(p["id"])
+	if p['source'] == "card":
+		total_spend = total_spend + p['amount']
+		cents = tare_cents(p['amount'])			
+		if (cents) != 0:
+			rounded_val = round_up(cents)
+		else: rounded_val = 0
 
-	for p in data['transactions']:
-		tranIDs.append(p["id"])
-		if p['source'] == "card":
-			total_spend = total_spend + p['amount']
-			cents = tare_cents(p['amount'])			
-			if (cents) != 0:
-				rounded_val = round_up(cents)
-			else: rounded_val = 0
-
-			total_savings = total_savings + rounded_val
-			
-			print(rounded_val)
-			print('-----')
+		total_savings = total_savings + rounded_val
+		
+		print(rounded_val)
+		print(line)
 
 # Save last transaction ID to text file
+
+if total_savings == 0:
+	print('There were no debit card transactions, now exiting the applet')
+	exit()
 
 last_ID = tranIDs[0]
 with open('storage/last_tranID.txt', 'w') as f:
@@ -92,26 +115,23 @@ with open('storage/last_tranID.txt', 'w') as f:
 
 # If there're no transactions, exit the script
 
-if total_savings == 0:
-	print('There were no debit card transactions, now exiting the applet')
-	exit()
 
 # Initialilze the transfer post request
 
-TRANSFER_URL = f"/{base_url}transfers/"
+TRANSFER_URL = f"/{base_url}/transfers/"
 
-# # Create payload to post total savings
+# Create payload to post total savings
 
-# payload ={
-# 	"from_account_id": f"{checking_id}",
-# 	"to_account_id": f"{savings_id}",
-# 	"amount": total_savings
-# }
+payload ={
+	"from_account_id": f"{checking_id}",
+	"to_account_id": f"{savings_id}",
+	"amount": total_savings
+}
 
-# post_response = requests.post(TRANSFER_URL, headers=headers, json=payload)
+post_response = requests.post(TRANSFER_URL, headers=headers, json=payload)
 
-# print(post_response)
-# print(post_response.text)
+print(post_response)
+print(post_response.text)
 
 
 ## Send text update (Mainly built right off the send-sms.py in class example)
@@ -146,4 +166,4 @@ message = client.messages.create(to=RECIPIENT_SMS, from_=SENDER_SMS, body=conten
 # Update log file
 
 with open('storage/log.txt', 'a') as log:
-	log.write(f"\n{line}\nDate: {date}\nLast Transaction: {last_ID}\nTotal Spend: {total_spend_formatted}\nTotal Savings: {total_savings_formatted}")
+	log.write(f"\n{line}\nDate: {current_date}\nLast Transaction: {last_ID}\nTotal Spend: {total_spend_formatted}\nTotal Savings: {total_savings_formatted}")
