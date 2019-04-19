@@ -26,7 +26,7 @@ def round_up(my_amount): # <-- round up the cent value to the nearest dollar
 load_dotenv()
 
 TOKEN = os.environ.get("token")
-secret = os.environ.get("secret")
+SECRET = os.environ.get("secret")
 
 checking_id = os.environ.get("FROM_ACCT_ID")
 checking_bal_id = f'abl_{checking_id}'

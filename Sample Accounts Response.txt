@@ -1,0 +1,44 @@
+{
+  "accounts": [
+    {
+      "id": "string",
+      "name": "string",
+      "number": "string",
+      "type": "string",
+      "updated_at": "string",
+      "users": [
+        {
+          "id": "string",
+          "email": "user@example.com",
+          "first_name": "string",
+          "last_name": "string",
+          "addresses": [
+            {
+              "street_address": "123 Somewhere Lane",
+              "street_address_2": "Apartment 2",
+              "city": "Santa Cruz",
+              "region_code": "CA",
+              "postal_code": 95070
+            }
+          ],
+          "phone_numbers": [
+            {
+              "number": "+15555555555"
+            }
+          ]
+        }
+      ],
+      "features": [
+        "string"
+      ],
+      "routing": "string"
+    }
+  ],
+  "meta": {
+    "total": 0
+  },
+  "links": {
+    "next": "string",
+    "previous": "string"
+  }
+}
