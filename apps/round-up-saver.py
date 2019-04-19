@@ -103,22 +103,24 @@ for p in data['transactions']:
 		print(rounded_val)
 		print(line)
 
-# Save last transaction ID to text file
+
+# If there're no transactions, exit the script
 
 if total_savings == 0:
 	print('There were no debit card transactions, now exiting the applet')
+	with open('storage/log.txt', 'a') as log:
+		log.write(f"\n{line}\nDate: {current_date}\nLast Transaction: {previous_transaction}\nTotal Spend: {total_spend_formatted}\nTotal Savings: {total_savings_formatted}\nMessage: SCRIPT EXIT - NO NEW TRANSACTIONS")
 	exit()
+
+# Save last transaction ID to text file
 
 last_ID = tranIDs[0]
 with open('storage/last_tranID.txt', 'w') as f:
 	f.write(last_ID)
 
-# If there're no transactions, exit the script
-
-
 # Initialilze the transfer post request
 
-TRANSFER_URL = f"/{base_url}/transfers/"
+TRANSFER_URL = f"{base_url}/transfers/"
 
 # Create payload to post total savings
 
@@ -129,10 +131,6 @@ payload ={
 }
 
 post_response = requests.post(TRANSFER_URL, headers=headers, json=payload)
-
-print(post_response)
-print(post_response.text)
-
 
 ## Send text update (Mainly built right off the send-sms.py in class example)
 
@@ -166,4 +164,4 @@ message = client.messages.create(to=RECIPIENT_SMS, from_=SENDER_SMS, body=conten
 # Update log file
 
 with open('storage/log.txt', 'a') as log:
-	log.write(f"\n{line}\nDate: {current_date}\nLast Transaction: {last_ID}\nTotal Spend: {total_spend_formatted}\nTotal Savings: {total_savings_formatted}")
+	log.write(f"\n{line}\nDate: {current_date}\nLast Transaction: {last_ID}\nTotal Spend: {total_spend_formatted}\nTotal Savings: {total_savings_formatted}\nGet Response Code: {tran_response}\nPost Response Code: {post_response}\nMessage: SUCCESS")
