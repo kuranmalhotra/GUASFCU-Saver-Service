@@ -39,7 +39,7 @@ line = "-"*50
 
 current_date = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
 
-date = os.environ.get("NARMI_DATE")
+date = os.environ.get("NARMI_DATE", "OOPS")
 sig = os.environ.get("NARMI_SIG", "OOPS")
 signature = f'keyId="{TOKEN}",algorithm="hmac-sha256",headers="date",signature="{sig}"'
 
@@ -53,9 +53,8 @@ tranIDs = []
 total_spend = 0
 total_savings = 0
 
-
+############ To be deleted upon completion ############# 
 # Open sample json transaction data
-
 # with open('test.txt') as json_file:
 # 	data=json.load(json_file)
 #   #run transactions off json file	
@@ -72,6 +71,7 @@ total_savings = 0
 #			
 #			print(rounded_val)
 #			print(line)
+########################################################
 
 # Gather last transaction ID
 
@@ -132,7 +132,7 @@ payload ={
 
 post_response = requests.post(TRANSFER_URL, headers=headers, json=payload)
 
-## Send text update (Mainly built right off the send-sms.py in class example)
+## Send text update (Mainly built right off the send-sms.py in-class example)
 
 # Initialize environment variables:
 
