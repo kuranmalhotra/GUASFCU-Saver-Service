@@ -58,7 +58,7 @@ tranIDs = []
 total_spend = 0
 total_savings = 0
 
-############ To be deleted upon completion ############# 
+############ To be used for testing and inclass demo ############# 
 # Open sample json transaction data
 # with open('test.txt') as json_file:
 # 	data=json.load(json_file)
