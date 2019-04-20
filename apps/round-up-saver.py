@@ -159,3 +159,5 @@ message = client.messages.create(to=RECIPIENT_SMS, from_=SENDER_SMS, body=conten
 
 with open('storage/log.txt', 'a') as log:
 	log.write(f"\n{line}\nDate: {date}\nLast Transaction: {last_ID}\nTotal Spend: {total_spend_formatted}\nTotal Savings: {total_savings_formatted}\nGet Response Code: {tran_response}\nPost Response Code: {post_response}\nMessage: SUCCESS")
+
+print(content)
