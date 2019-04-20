@@ -162,7 +162,6 @@ client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 content = f"This is a message from GUASFCU. You spent {total_spend_formatted} and saved {total_savings_formatted}!"
 
 # Send the SMS
-
 message = client.messages.create(to=RECIPIENT_SMS, from_=SENDER_SMS, body=content)
 
 # Update log file
