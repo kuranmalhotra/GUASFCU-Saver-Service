@@ -86,9 +86,6 @@ with open('storage/last_tranID.txt') as file:
 TRANSACTION_URL = f'{base_url}/accounts/{checking_id}/transactions?before={previous_transaction}'
 
 tran_response = requests.get(TRANSACTION_URL, headers=header_params)
-print(tran_response)
-print(tran_response.text)
-print(line)
 
 # Utilize real transaction data
 
@@ -105,7 +102,6 @@ for p in data['transactions']:
 
 		total_savings = total_savings + rounded_val
 		
-		print(rounded_val)
 		print(line)
 
 # Format the spend/save numbers for notification text
