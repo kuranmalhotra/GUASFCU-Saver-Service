@@ -7,6 +7,7 @@ test.txt
 test2.txt
 recent_tran.txt
 test_script.py
+__pycache__
 
 # Design and planning:
 Requirements.docx
