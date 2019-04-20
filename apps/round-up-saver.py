@@ -5,6 +5,7 @@
 
 from datetime import datetime
 from dotenv import load_dotenv
+import httpsig
 import json
 import os
 import pprint
@@ -37,17 +38,21 @@ signature_imported = os.environ.get("sig")
 base_url = os.environ.get("baseurl")
 line = "-"*50
 
-current_date = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+###
 
-date = os.environ.get("NARMI_DATE", "OOPS")
-sig = os.environ.get("NARMI_SIG", "OOPS")
-signature = f'keyId="{TOKEN}",algorithm="hmac-sha256",headers="date",signature="{sig}"'
+algorithm = 'hmac-sha256'
+date = datetime.utcnow().isoformat() + 'Z'
+signed_headers = ['date']
+hs = httpsig.HeaderSigner(TOKEN, SECRET, algorithm=algorithm, headers=signed_headers)
+hs.signature_template = 'keyId="{}",algorithm="{}",signature="%s",headers="{}"'.format(TOKEN, algorithm, ' '.join(signed_headers))
+signature = hs.sign({'Date': date,})
 
-headers = {
-    "Authorization": f"Bearer {TOKEN}",
-    "Date": date,
-    "Signature": signature
-}
+header_params = {}
+header_params['Authorization'] = 'Bearer {}'.format(TOKEN)
+header_params['Signature'] = signature['authorization']
+header_params['Date'] = date
+
+###
 
 tranIDs = []
 total_spend = 0
@@ -80,7 +85,7 @@ with open('storage/last_tranID.txt') as file:
 
 TRANSACTION_URL = f'{base_url}/accounts/{checking_id}/transactions?before={previous_transaction}'
 
-tran_response = requests.get(TRANSACTION_URL, headers=headers)
+tran_response = requests.get(TRANSACTION_URL, headers=header_params)
 print(tran_response)
 print(tran_response.text)
 print(line)
@@ -103,13 +108,20 @@ for p in data['transactions']:
 		print(rounded_val)
 		print(line)
 
+# Format the spend/save numbers for notification text
+
+total_spend_usd = "{0:.2f}".format(-(total_spend/100))
+total_spend_formatted = str(f'${total_spend_usd}')
+
+total_savings_usd = "{0:.2f}".format(total_savings/100)
+total_savings_formatted = str(f'${total_savings_usd}')
 
 # If there're no transactions, exit the script
 
 if total_savings == 0:
 	print('There were no debit card transactions, now exiting the applet')
 	with open('storage/log.txt', 'a') as log:
-		log.write(f"\n{line}\nDate: {current_date}\nLast Transaction: {previous_transaction}\nTotal Spend: {total_spend_formatted}\nTotal Savings: {total_savings_formatted}\nMessage: SCRIPT EXIT - NO NEW TRANSACTIONS")
+		log.write(f"\n{line}\nDate: {date}\nLast Transaction: {previous_transaction}\nTotal Spend: {total_spend_formatted}\nTotal Savings: {total_savings_formatted}\nMessage: SCRIPT EXIT - NO NEW TRANSACTIONS")
 	exit()
 
 # Save last transaction ID to text file
@@ -130,7 +142,7 @@ payload ={
 	"amount": total_savings
 }
 
-post_response = requests.post(TRANSFER_URL, headers=headers, json=payload)
+post_response = requests.post(TRANSFER_URL, headers=header_params, json=payload)
 
 ## Send text update (Mainly built right off the send-sms.py in-class example)
 
@@ -140,14 +152,6 @@ TWILIO_ACCOUNT_SID = os.environ.get("TWILIO_ACCOUNT_SID", "OOPS, please specify 
 TWILIO_AUTH_TOKEN  = os.environ.get("TWILIO_AUTH_TOKEN", "OOPS, please specify env var called 'TWILIO_AUTH_TOKEN'")
 SENDER_SMS  = os.environ.get("SENDER_SMS", "OOPS, please specify env var called 'SENDER_SMS'")
 RECIPIENT_SMS  = os.environ.get("RECIPIENT_SMS", "OOPS, please specify env var called 'RECIPIENT_SMS'")
-
-# Format the spend/save numbers for notification text
-
-total_spend_usd = "{0:.2f}".format(-(total_spend/100))
-total_spend_formatted = str(f'${total_spend_usd}')
-
-total_savings_usd = "{0:.2f}".format(total_savings/100)
-total_savings_formatted = str(f'${total_savings_usd}')
 
 # Authenticate into the Twilio service
 
@@ -164,4 +168,4 @@ message = client.messages.create(to=RECIPIENT_SMS, from_=SENDER_SMS, body=conten
 # Update log file
 
 with open('storage/log.txt', 'a') as log:
-	log.write(f"\n{line}\nDate: {current_date}\nLast Transaction: {last_ID}\nTotal Spend: {total_spend_formatted}\nTotal Savings: {total_savings_formatted}\nGet Response Code: {tran_response}\nPost Response Code: {post_response}\nMessage: SUCCESS")
+	log.write(f"\n{line}\nDate: {date}\nLast Transaction: {last_ID}\nTotal Spend: {total_spend_formatted}\nTotal Savings: {total_savings_formatted}\nGet Response Code: {tran_response}\nPost Response Code: {post_response}\nMessage: SUCCESS")
