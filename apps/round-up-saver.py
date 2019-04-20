@@ -58,7 +58,7 @@ tranIDs = []
 total_spend = 0
 total_savings = 0
 
-####### To be used for testing and inclass demo ########
+####### To be used for testing and in-class demo ########
 # Open sample json transaction data
 # with open('test.txt') as json_file:
 # 	data=json.load(json_file)
@@ -146,22 +146,17 @@ post_response = requests.post(TRANSFER_URL, headers=header_params, json=payload)
 
 ## Send text update (Mainly built right off the send-sms.py in-class example)
 
-# Initialize environment variables:
+# Initialize environment variables
 
 TWILIO_ACCOUNT_SID = os.environ.get("TWILIO_ACCOUNT_SID", "OOPS, please specify env var called 'TWILIO_ACCOUNT_SID'")
 TWILIO_AUTH_TOKEN  = os.environ.get("TWILIO_AUTH_TOKEN", "OOPS, please specify env var called 'TWILIO_AUTH_TOKEN'")
 SENDER_SMS  = os.environ.get("SENDER_SMS", "OOPS, please specify env var called 'SENDER_SMS'")
 RECIPIENT_SMS  = os.environ.get("RECIPIENT_SMS", "OOPS, please specify env var called 'RECIPIENT_SMS'")
 
-# Authenticate into the Twilio service
+# Authenticate into Twilio and send the message
 
 client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
-
-# Prepare the message for sending
-
 content = f"This is a message from GUASFCU. You spent {total_spend_formatted} and saved {total_savings_formatted}!"
-
-# Send the SMS
 message = client.messages.create(to=RECIPIENT_SMS, from_=SENDER_SMS, body=content)
 
 # Update log file
