@@ -1,3 +1,4 @@
+httpsig
 pprint
 pytest
 python-dotenv
