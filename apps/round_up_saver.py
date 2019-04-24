@@ -81,7 +81,7 @@ if __name__ == '__main__':
 	########################################################
 
 	# Gather last transaction ID
-	exists = os.path.isfile('/storage/last_tranID')
+	exists = os.path.isfile('storage/last_tranID.txt')
 	
 	if exists:
 		with open('storage/last_tranID.txt') as file:
