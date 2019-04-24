@@ -21,4 +21,4 @@ Reading and writing the log file and the last transaction file, as well as in my
 
 ### Special thanks to:
 
-Professor Rossetti for all of his time and help in working to ensure I could create this project. He helped me bounce ideas around, with the actual build itself, and in learning all of the various tips/tricks that made this possible. 
+[Professor Rossetti](https://github.com/s2t2) for all of his time and help in working to ensure I could create this project. He helped me bounce ideas around, with the actual build itself, and in learning all of the various tips/tricks that made this possible. 

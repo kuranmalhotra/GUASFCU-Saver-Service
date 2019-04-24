@@ -8,10 +8,20 @@ Through this methodology, for every cup of coffee you buy at $2.25, you will sav
 
 ## Technical Prerequisites
 
+<b>Software Requirements</b>
 - Git
 - Anaconda 3.7
 - Python 3.7
 - Pip
+- Packages listed in `/requirements.txt`
+
+<b>Hardware Requirements</b>
+
+The software should be installed on a personal computer and a Heroku application server or other production server with the capability to continuously execute the Python scrips on an inteval (suggested: 10 minutes)
+
+<b>Network Requirements</b>
+
+The service requires an internet connection to connect to and communicate data through the GUASFCU, Narmi, and Twilio API services, all over HTTPS protocol. 
 
 ## Banking Prerequisites
 
