@@ -1,0 +1,35 @@
+{
+  "transactions": [
+    {
+      "id": "string",
+      "description": "string",
+      "type": "string",
+      "source": "string",
+      "settled_at": "string",
+      "created_at": "string",
+      "account_id": "string",
+      "category": "string",
+      "sub_category": "string",
+      "amount": 0,
+      "location": {
+        "city": "Santa Cruz",
+        "region_code": "CA",
+        "country_code": "USA"
+      },
+      "check": {
+        "number": "string"
+      },
+      "tags": [
+        "string"
+      ],
+      "note": "string"
+    }
+  ],
+  "meta": {
+    "total": 0
+  },
+  "links": {
+    "next": "string",
+    "previous": "string"
+  }
+}

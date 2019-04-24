@@ -15,7 +15,7 @@ Through this methodology, for every cup of coffee you buy at $2.25, you will sav
 
 ## Banking Prerequisites
 
-In order to utilize this service, you must have an account with GUASFCU. You can create this account by signing up at [www.guasfcu.com](www.guasfcu.com).
+In order to utilize this service, you must have an online account with GUASFCU. You can create this account by signing up at [www.guasfcu.com](https://online.guasfcu.com/login).
 
 You must also have obtained an API key from GUASFCU. This key can be obtained by signing up with [Narmi](https://www.narmi.com/developers/guides/).
 
@@ -60,12 +60,12 @@ signature=`echo -n "date: $date" | openssl dgst -sha256 -binary -hmac "$secret" 
 curl -H "Authorization: Bearer $token" -H "Date: $date" -H "Signature: keyId=\"$token\",algorithm=\"hmac-sha256\",headers=\"date\",signature=\"$signature\"" 'https://api.guasfcu.com/v1/accounts/''
 ```
 
-then from the JSON response, copy the account ID for the checking account into your .env file as the `FROM_ACCT_ID` and the account ID for your savings account as the `TO_ACCT_ID`. A sample response can be found at /Sample Accounts Response.txt. You're looking to take the "id" filed of the accounts portion of the response. 
+then from the JSON response, copy the account ID for the checking account into your .env file as the `FROM_ACCT_ID` and the account ID for your savings account as the `TO_ACCT_ID`. A sample response can be found at /Sample_Accounts_Response.txt. You're looking to take the "id" filed of the accounts portion of the response. 
 
 Create the last_tranID.txt file:
 
 1. Create a file under the storage folder entitled 'last_tranID.txt' — the file path should be as follows `storage/last_tranID.txt`
-2. Run the following script, and obtain the transaction ID for the first transaction (the most recent) that is obtained:
+2. Run the following script, and obtain the transaction ID for the first transaction (the most recent) that is obtained. A sample response can be found at /Sample_Transactions_Response.txt Make sure to substitute in your token, secret, and FROM_ACCT_ID:
 
 ```sh
 token='XXXX'
