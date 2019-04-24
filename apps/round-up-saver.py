@@ -93,7 +93,7 @@ data = json.loads(tran_response.text)
 # run transactions off json file
 for p in data['transactions']:
 	tranIDs.append(p["id"])
-	if p['source'] == "card":
+	if p['source'] == "card" or p['source'] == "ATM Payment":
 		total_spend = total_spend + p['amount']
 		cents = tare_cents(p['amount'])			
 		if (cents) != 0:
