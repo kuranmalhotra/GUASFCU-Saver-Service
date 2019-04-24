@@ -1,6 +1,4 @@
-# GUASFCU Saver Service
-
-[![Build Status](https://travis-ci.com/kmalhotra13/GUASFCU-Saver-Service.svg?branch=master)](https://travis-ci.com/kmalhotra13/GUASFCU-Saver-Service)
+# GUASFCU Saver Service [![Build Status](https://travis-ci.com/kmalhotra13/GUASFCU-Saver-Service.svg?branch=master)](https://travis-ci.com/kmalhotra13/GUASFCU-Saver-Service)
 
 The purpose of this service is to automate savings for college students who might not have the ability to save by traditional means. The main service currently deployed is the Round Up Saver Tool. 
 
