@@ -81,13 +81,16 @@ if __name__ == '__main__':
 	########################################################
 
 	# Gather last transaction ID
-	exists = os.path.isfile('storage/last_tranID.txt')
+	# exists = os.path.isfile('storage/last_tranID.txt')
 	
-	if exists:
-		with open('storage/last_tranID.txt') as file:
-			previous_transaction = file.read()
-	else:
-		previous_transaction = os.environ.get("last_tranID_env")
+	# if exists:
+	# 	with open('storage/last_tranID.txt') as file:
+	# 		previous_transaction = file.read()
+	# else:
+	# 	previous_transaction = os.environ.get("last_tranID_env")
+
+	with open('storage/last_tranID.txt') as file:
+		previous_transaction = file.read()
 
 	TRANSACTION_URL = f'{base_url}/accounts/{checking_id}/transactions?before={previous_transaction}'
 
