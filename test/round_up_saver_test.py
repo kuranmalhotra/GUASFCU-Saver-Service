@@ -57,10 +57,6 @@ def test_create_https_header():
 	header_params_test['Date'] = date
 	assert result == header_params_test
 
-def test_last_tranID_file():
-	last_tranID_filepath = 'storage/last_tranID.txt'
-	assert os.path.isfile(last_tranID_filepath) == True
-
 def test_api_link():
 	test_url = f'{base_url}/ping'
 	result = requests.get(test_url)
