@@ -41,6 +41,8 @@ def round_up(my_amount): # <-- round up the cent value to the nearest dollar
 if __name__ == '__main__':
 
 	###
+	
+	# Create header for API requests
 
 	algorithm = 'hmac-sha256'
 	date = datetime.utcnow().isoformat() + 'Z'
@@ -60,14 +62,18 @@ if __name__ == '__main__':
 	total_spend = 0
 	total_savings = 0
 
+	# Get last transaction ID (allow API to pull all transactions after that)
+
 	with open('storage/last_tranID.txt') as file:
 		previous_transaction = file.read()
 
+	# Get transaction data
+	
 	TRANSACTION_URL = f'{base_url}/accounts/{checking_id}/transactions?before={previous_transaction}'
 
 	tran_response = requests.get(TRANSACTION_URL, headers=header_params)
 
-	# Utilize real transaction data
+	# Parse transaction data
 
 	data = json.loads(tran_response.text)
 	# run transactions off json file
@@ -140,4 +146,6 @@ if __name__ == '__main__':
 	with open('storage/log.txt', 'a') as log:
 		log.write(f"\n{line}\nDate: {date}\nLast Transaction: {last_ID}\nTotal Spend: {total_spend_formatted}\nTotal Savings: {total_savings_formatted}\nGet Response Code: {tran_response}\nPost Response Code: {post_response}\nMessage: SUCCESS")
 
+	# Print response to console
+	
 	print(content)

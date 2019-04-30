@@ -89,3 +89,40 @@ curl -H "Authorization: Bearer $token" -H "Date: $date" -H "Signature: keyId=\"$
 ```
 
 3. Paste that transaction ID into the last_tranID.txt file, without any other characters. See the storage/last_tranID_example.txt for more information.
+
+## Usage
+
+Before using the script, verify the following are set up:
+- Your .env file containing environment variables for:
+	- Narmi Banking API Token
+	- Narmi Banking API Secret Key
+	- Online Banking API base URL
+	- Checking Account ID
+	- Savings Account ID
+	- Twilio Account SID
+	- Twilio Auth Token
+	- Sender Phone Number
+	- Recipient Phone Number
+- Your storage/last_tranID.txt File containing solely the transaction ID for the last transaction made on your debit card
+- All of the software and hardware prerequisites and the requirements.txt file installed. 
+
+You're ready to go! If you're running the script locally, ensure that you're in the correct directory (run the following):
+
+```sh
+cd GUASFCU-Saver-Service/
+``` 
+
+From there, to run the script a single time, run the following command:
+
+```sh
+python apps/round_up_saver.py
+```
+
+If you are hoping to deploy the script to a remote server, ensure that the same set up is done, and then schedule that script to run as often as you would like. I would recommend every 10 minutes or so, as that will capture debit card transactions very frequently, though you can do this as often as you'd like. 
+
+### Feedback
+
+For questions, comments, concerns, or support, please feel free to reach out to me at kuranmalhotra.com! 
+
+
+
