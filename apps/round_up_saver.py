@@ -60,35 +60,6 @@ if __name__ == '__main__':
 	total_spend = 0
 	total_savings = 0
 
-	####### To be used for testing and in-class demo ########
-	# Open sample json transaction data
-	# with open('test.txt') as json_file:
-	# 	data=json.load(json_file)
-	#   #run transactions off json file	
-	#	for p in data['transactions']:
-	#		tranIDs.append(p["id"])
-	#		if p['source'] == "card":
-	#			total_spend = total_spend + p['amount']
-	#			cents = tare_cents(p['amount'])			
-	#			if (cents) != 0:
-	#				rounded_val = round_up(cents)
-	#			else: rounded_val = 0
-	#
-	#			total_savings = total_savings + rounded_val
-	#			
-	#			print(rounded_val)
-	#			print(line)
-	########################################################
-
-	# Gather last transaction ID
-	# exists = os.path.isfile('storage/last_tranID.txt')
-	
-	# if exists:
-	# 	with open('storage/last_tranID.txt') as file:
-	# 		previous_transaction = file.read()
-	# else:
-	# 	previous_transaction = os.environ.get("last_tranID_env")
-
 	with open('storage/last_tranID.txt') as file:
 		previous_transaction = file.read()
 
