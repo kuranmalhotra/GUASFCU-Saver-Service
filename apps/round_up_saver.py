@@ -24,8 +24,17 @@ checking_bal_id = f'abl_{checking_id}'
 savings_id = os.environ.get("TO_ACCT_ID")
 savings_bal_id = f'abl_{savings_id}'
 
-signature_imported = os.environ.get("sig")
 base_url = os.environ.get("baseurl")
+
+# Signature Variables
+date = datetime.utcnow().isoformat() + 'Z'
+algorithm = 'hmac-sha256'
+signed_headers = ['date']
+hs = httpsig.HeaderSigner(TOKEN, SECRET, algorithm=algorithm, headers=signed_headers)
+hs.signature_template = 'keyId="{}",algorithm="{}",signature="%s",headers="{}"'.format(TOKEN, algorithm, ' '.join(signed_headers))
+signature = hs.sign({'Date': date,})
+
+
 line = "-"*50
 
 # Function definition
@@ -38,23 +47,32 @@ def round_up(my_amount): # <-- round up the cent value to the nearest dollar
 	round_val = 100-my_amount
 	return(round_val)
 
+def create_https_header():
+
+	header_params = {}
+	header_params['Authorization'] = 'Bearer {}'.format(TOKEN)
+	header_params['Signature'] = signature['authorization']
+	header_params['Date'] = date
+
+	return header_params
+
 if __name__ == '__main__':
 
 	###
 	
 	# Create header for API requests
 
-	algorithm = 'hmac-sha256'
-	date = datetime.utcnow().isoformat() + 'Z'
-	signed_headers = ['date']
-	hs = httpsig.HeaderSigner(TOKEN, SECRET, algorithm=algorithm, headers=signed_headers)
-	hs.signature_template = 'keyId="{}",algorithm="{}",signature="%s",headers="{}"'.format(TOKEN, algorithm, ' '.join(signed_headers))
-	signature = hs.sign({'Date': date,})
+	# algorithm = 'hmac-sha256'
+	# date = datetime.utcnow().isoformat() + 'Z'
+	# signed_headers = ['date']
+	# hs = httpsig.HeaderSigner(TOKEN, SECRET, algorithm=algorithm, headers=signed_headers)
+	# hs.signature_template = 'keyId="{}",algorithm="{}",signature="%s",headers="{}"'.format(TOKEN, algorithm, ' '.join(signed_headers))
+	# signature = hs.sign({'Date': date,})
 
-	header_params = {}
-	header_params['Authorization'] = 'Bearer {}'.format(TOKEN)
-	header_params['Signature'] = signature['authorization']
-	header_params['Date'] = date
+	# header_params = {}
+	# header_params['Authorization'] = 'Bearer {}'.format(TOKEN)
+	# header_params['Signature'] = signature['authorization']
+	# header_params['Date'] = date
 
 	###
 
@@ -69,9 +87,11 @@ if __name__ == '__main__':
 
 	# Get transaction data
 	
+	header_parameters = create_https_header()
+
 	TRANSACTION_URL = f'{base_url}/accounts/{checking_id}/transactions?before={previous_transaction}'
 
-	tran_response = requests.get(TRANSACTION_URL, headers=header_params)
+	tran_response = requests.get(TRANSACTION_URL, headers=header_parameters)
 
 	# Parse transaction data
 
@@ -124,7 +144,7 @@ if __name__ == '__main__':
 		"amount": total_savings
 	}
 
-	post_response = requests.post(TRANSFER_URL, headers=header_params, json=payload)
+	post_response = requests.post(TRANSFER_URL, headers=header_parameters, json=payload)
 
 	## Send text update (Mainly built right off the send-sms.py in-class example)
 
