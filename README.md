@@ -124,5 +124,3 @@ If you are hoping to deploy the script to a remote server, ensure that the same 
 
 For questions, comments, concerns, or support, please feel free to reach out to me at kuranmalhotra.com! 
 
-
-
