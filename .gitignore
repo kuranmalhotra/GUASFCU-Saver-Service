@@ -15,3 +15,7 @@ current.png
 info.png
 proposed.png
 storage/last_tranID.txt
+
+Icon
+bin/get_accounts.sh
+bin/get_transactions.sh

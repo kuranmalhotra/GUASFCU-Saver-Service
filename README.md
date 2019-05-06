@@ -1,11 +1,11 @@
 # GUASFCU Saver Service [![Build Status](https://travis-ci.com/kmalhotra13/GUASFCU-Saver-Service.svg?branch=master)](https://travis-ci.com/kmalhotra13/GUASFCU-Saver-Service)
 <i><h3>Created by Kuran P. Malhotra</h3></i>
 
-The purpose of this service is to automate savings for college students who might not have the ability to save by traditional means. The main service currently deployed is the Round Up Saver Tool. 
+The purpose of this service is to automate savings for college students who might not have the ability to save by traditional means. The main service currently deployed is the Round Up Saver Tool.
 
-The tool functions via its remote server deployment, and every 10 minutes it gathers all new debit card transactions made out of the linked account. From there, the service aggregates the Penny value of the difference between each transaction amount and the next dollar, and deposits that value into savings. 
+The tool functions via its remote server deployment, and every 10 minutes it gathers all new debit card transactions made out of the linked account. From there, the service aggregates the Penny value of the difference between each transaction amount and the next dollar, and deposits that value into savings.
 
-Through this methodology, for every cup of coffee you buy at $2.25, you will save $0.75. 
+Through this methodology, for every cup of coffee you buy at $2.25, you will save $0.75.
 
 ## Technical Prerequisites
 
@@ -22,7 +22,7 @@ The software should be installed on a personal computer and a Heroku application
 
 <b>Network Requirements</b>
 
-The service requires an internet connection to connect to and communicate data through the GUASFCU, Narmi, and Twilio API services, all over HTTPS protocol. 
+The service requires an internet connection to connect to and communicate data through the GUASFCU, Narmi, and Twilio API services, all over HTTPS protocol.
 
 ## Banking Prerequisites
 
@@ -68,10 +68,10 @@ date=`date -u +'%Y-%m-%dT%H:%M:%SZ'`
 
 signature=`echo -n "date: $date" | openssl dgst -sha256 -binary -hmac "$secret" | base64`
 
-curl -H "Authorization: Bearer $token" -H "Date: $date" -H "Signature: keyId=\"$token\",algorithm=\"hmac-sha256\",headers=\"date\",signature=\"$signature\"" 'https://api.guasfcu.com/v1/accounts/''
+curl -H "Authorization: Bearer $token" -H "Date: $date" -H "Signature: keyId=\"$token\",algorithm=\"hmac-sha256\",headers=\"date\",signature=\"$signature\"" 'https://api.demo.narmitech.com/v1/accounts/'
 ```
 
-then from the JSON response, copy the account ID for the checking account into your .env file as the `FROM_ACCT_ID` and the account ID for your savings account as the `TO_ACCT_ID`. A sample response can be found at /Sample_Accounts_Response.txt. You're looking to take the "id" filed of the accounts portion of the response. 
+then from the JSON response, copy the account ID for the checking account into your .env file as the `FROM_ACCT_ID` and the account ID for your savings account as the `TO_ACCT_ID`. A sample response can be found at /Sample_Accounts_Response.txt. You're looking to take the "id" filed of the accounts portion of the response.
 
 Create the last_tranID.txt file:
 
@@ -105,13 +105,13 @@ Before using the script, verify the following are set up:
 	- Sender Phone Number
 	- Recipient Phone Number
 - Your storage/last_tranID.txt File containing solely the transaction ID for the last transaction made on your debit card
-- All of the software and hardware prerequisites and the requirements.txt file installed. 
+- All of the software and hardware prerequisites and the requirements.txt file installed.
 
 You're ready to go! If you're running the script locally, ensure that you're in the correct directory (run the following):
 
 ```sh
 cd GUASFCU-Saver-Service/
-``` 
+```
 
 From there, to run the script a single time, run the following command:
 
@@ -119,9 +119,8 @@ From there, to run the script a single time, run the following command:
 python apps/round_up_saver.py
 ```
 
-If you are hoping to deploy the script to a remote server, ensure that the same set up is done, and then schedule that script to run as often as you would like. I would recommend every 10 minutes or so, as that will capture debit card transactions very frequently, though you can do this as often as you'd like. 
+If you are hoping to deploy the script to a remote server, ensure that the same set up is done, and then schedule that script to run as often as you would like. I would recommend every 10 minutes or so, as that will capture debit card transactions very frequently, though you can do this as often as you'd like.
 
 ### Feedback
 
-For questions, comments, concerns, or support, please feel free to reach out to me at [kuranmalhotra.com](https://kuranmalhotra.com)! 
-
+For questions, comments, concerns, or support, please feel free to reach out to me at [kuranmalhotra.com](https://kuranmalhotra.com)!
