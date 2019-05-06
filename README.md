@@ -68,7 +68,7 @@ date=`date -u +'%Y-%m-%dT%H:%M:%SZ'`
 
 signature=`echo -n "date: $date" | openssl dgst -sha256 -binary -hmac "$secret" | base64`
 
-curl -H "Authorization: Bearer $token" -H "Date: $date" -H "Signature: keyId=\"$token\",algorithm=\"hmac-sha256\",headers=\"date\",signature=\"$signature\"" 'https://api.guasfcu.com/v1/accounts/''
+curl -H "Authorization: Bearer $token" -H "Date: $date" -H "Signature: keyId=\"$token\",algorithm=\"hmac-sha256\",headers=\"date\",signature=\"$signature\"" 'https://api.guasfcu.com/v1/accounts/'
 ```
 
 then from the JSON response, copy the account ID for the checking account into your .env file as the `FROM_ACCT_ID` and the account ID for your savings account as the `TO_ACCT_ID`. A sample response can be found at /Sample_Accounts_Response.txt. You're looking to take the "id" filed of the accounts portion of the response. 
@@ -86,7 +86,7 @@ date=`date -u +'%Y-%m-%dT%H:%M:%SZ'`
 
 signature=`echo -n "date: $date" | openssl dgst -sha256 -binary -hmac "$secret" | base64`
 
-curl -H "Authorization: Bearer $token" -H "Date: $date" -H "Signature: keyId=\"$token\",algorithm=\"hmac-sha256\",headers=\"date\",signature=\"$signature\"" 'https://api.guasfcu.com/v1/accounts/FROM_ACCT_ID/transactions/''
+curl -H "Authorization: Bearer $token" -H "Date: $date" -H "Signature: keyId=\"$token\",algorithm=\"hmac-sha256\",headers=\"date\",signature=\"$signature\"" 'https://api.guasfcu.com/v1/accounts/FROM_ACCT_ID/transactions/'
 ```
 
 3. Paste that transaction ID into the last_tranID.txt file, without any other characters. See the storage/last_tranID_example.txt for more information.
