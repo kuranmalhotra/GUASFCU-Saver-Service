@@ -48,7 +48,7 @@ Finally, set an environment variable called `RECIPIENT_SMS` to specify the recip
 In order to set up this applet, please download install the source code:
 
 ```sh
-git clone git@github.com:kmalhotra/GUASFCU-Saver-Service
+git clone https://github.com/kmalhotra13/GUASFCU-Saver-Service.git
 cd GUASFCU-Saver-Service/
 ```
 
